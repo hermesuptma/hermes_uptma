@@ -29,4 +29,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function secciones()
+    {
+        return $this->hasMany(\App\Models\Seccion::class, 'profesor_id');
+    }
 }
