@@ -2,6 +2,23 @@
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Models\Estudiante;
+use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+Route::get('/carnets/generar', function () {
+    $estudiantes = Estudiante::orderBy('nombre')->get();
+
+    $qrs = [];
+    foreach ($estudiantes as $estudiante) {
+        $qrs[$estudiante->id] = 'data:image/svg+xml;base64,' . base64_encode(
+        QrCode::format('svg')->size(200)->generate($estudiante->codigo_qr)
+        );
+    }
+
+    $pdf = Pdf::loadView('carnets.pdf', compact('estudiantes', 'qrs'));
+    return $pdf->stream('carnets.pdf');
+})->middleware(['auth', 'verified'])->name('carnets.generar');
 
 Route::view('/', 'welcome');
 
@@ -36,6 +53,10 @@ Volt::route('estudiantes', 'estudiantes.index')
 Volt::route('inscripciones', 'inscripciones.index')
     ->middleware(['auth', 'verified'])
     ->name('inscripciones');
+
+Volt::route('escaneo', 'escaneo.index')
+    ->middleware(['auth', 'verified'])
+    ->name('escaneo');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
