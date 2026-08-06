@@ -13,6 +13,10 @@ Volt::route('carreras', 'carreras.index')
     ->middleware(['auth', 'verified'])
     ->name('carreras');
 
+Volt::route('materias', 'materias.index')
+    ->middleware(['auth', 'verified'])
+    ->name('materias');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
