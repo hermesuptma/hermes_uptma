@@ -33,6 +33,10 @@ Volt::route('estudiantes', 'estudiantes.index')
     ->middleware(['auth', 'verified'])
     ->name('estudiantes');
 
+Volt::route('inscripciones', 'inscripciones.index')
+    ->middleware(['auth', 'verified'])
+    ->name('inscripciones');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
