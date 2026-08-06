@@ -17,6 +17,22 @@ Volt::route('materias', 'materias.index')
     ->middleware(['auth', 'verified'])
     ->name('materias');
 
+Volt::route('periodos', 'periodos.index')
+    ->middleware(['auth', 'verified'])
+    ->name('periodos');
+
+Volt::route('trayectos', 'trayectos.index')
+    ->middleware(['auth', 'verified'])
+    ->name('trayectos');
+
+Volt::route('secciones', 'secciones.index')
+    ->middleware(['auth', 'verified'])
+    ->name('secciones');
+
+Volt::route('estudiantes', 'estudiantes.index')
+    ->middleware(['auth', 'verified'])
+    ->name('estudiantes');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');

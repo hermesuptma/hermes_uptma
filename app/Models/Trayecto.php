@@ -6,13 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Trayecto extends Model
 {
-    class Trayecto extends Model
-    {
-        protected $fillable = ['nombre'];
+    protected $fillable = ['nombre'];
 
-        public function secciones()
-        {
+    public function secciones()
+    {
         return $this->hasMany(Seccion::class);
-        }
     }
 }

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Seccion extends Model
 {
+    protected $table = 'secciones';
+
     protected $fillable = ['materia_id', 'profesor_id', 'periodo_academico_id', 'trayecto_id', 'modalidad', 'nombre_seccion'];
 
     public function materia()

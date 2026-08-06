@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Estudiante extends Model
 {
-    protected $fillable = ['matricula', 'nombre', 'correo', 'codigo_qr'];
+    protected $fillable = ['cedula', 'nombre', 'correo', 'telefono', 'codigo_qr'];
 
     public function secciones()
     {
