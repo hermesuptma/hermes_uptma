@@ -1,14 +1,16 @@
 <?php
 
-use function Livewire\Volt\{state, computed, layout};
+use function Livewire\Volt\{state, computed, layout, on};
 use App\Models\Seccion;
 use App\Models\SesionClase;
+use App\Models\Estudiante;
 
 layout('layouts.app');
 
 state([
     'seccion_id' => '',
     'sesionActivaId' => null,
+    'ultimoResultado' => null,
 ]);
 
 $secciones = computed(function () {
@@ -33,12 +35,25 @@ $iniciarClase = function () {
     ]);
 
     $this->sesionActivaId = $sesion->id;
+    $this->dispatch('iniciar-camara');
 };
 
 $finalizarSesion = function () {
     $this->sesionActivaId = null;
     $this->seccion_id = '';
+    $this->ultimoResultado = null;
 };
+
+on(['procesar-escaneo-cliente' => function ($texto) {
+    $estudiante = Estudiante::buscarPorCodigoEscaneado($texto);
+
+    if (!$estudiante) {
+        $this->ultimoResultado = ['ok' => false, 'mensaje' => 'Código no reconocido.'];
+        return;
+    }
+
+    $this->ultimoResultado = ['ok' => true, 'mensaje' => "Detectado: {$estudiante->nombre}"];
+}]);
 
 ?>
 
@@ -64,16 +79,52 @@ $finalizarSesion = function () {
         </div>
     @else
         <div class="bg-white p-4 rounded-lg shadow">
-            <p class="mb-2">
+            <p class="mb-1">
                 Sesión activa: <strong>{{ $this->sesionActiva->seccion->materia->nombre }} - {{ $this->sesionActiva->seccion->nombre_seccion }}</strong>
             </p>
             <p class="text-sm text-gray-500 mb-4">
-                Modo actual: <strong>{{ $this->sesionActiva->modo_actual }}</strong> — Sesión ID: {{ $this->sesionActivaId }}
+                Modo actual: <strong>{{ $this->sesionActiva->modo_actual }}</strong>
             </p>
 
-            <button wire:click="finalizarSesion" class="bg-gray-300 px-4 py-2 rounded">
-                Finalizar sesión (prueba)
+            <div id="lector-qr" style="width: 100%; max-width: 400px;"></div>
+
+            @if ($ultimoResultado)
+                <p class="mt-3 text-sm {{ $ultimoResultado['ok'] ? 'text-green-600' : 'text-red-600' }}">
+                    {{ $ultimoResultado['mensaje'] }}
+                </p>
+            @endif
+
+            <button wire:click="finalizarSesion" class="bg-gray-300 px-4 py-2 rounded mt-4">
+                Finalizar sesión
             </button>
         </div>
     @endif
 </div>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+    document.addEventListener('livewire:init', function () {
+        var lector = null;
+
+        function iniciarLector() {
+            var elemento = document.getElementById('lector-qr');
+            if (!elemento || lector) return;
+
+            lector = new Html5Qrcode('lector-qr');
+            lector.start(
+                { facingMode: 'environment' },
+                { fps: 10, qrbox: 250 },
+                function (textoDecodificado) {
+                    Livewire.dispatch('procesar-escaneo-cliente', { texto: textoDecodificado });
+                },
+                function (error) {}
+            ).catch(function (err) {
+                console.error('No se pudo iniciar la camara:', err);
+            });
+        }
+
+        Livewire.on('iniciar-camara', function () {
+            setTimeout(iniciarLector, 300);
+        });
+    });
+</script>
