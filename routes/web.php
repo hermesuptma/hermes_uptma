@@ -58,6 +58,10 @@ Volt::route('escaneo', 'escaneo.index')
     ->middleware(['auth', 'verified'])
     ->name('escaneo');
 
+Volt::route('reportes', 'reportes.index')
+    ->middleware(['auth', 'verified'])
+    ->name('reportes');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
