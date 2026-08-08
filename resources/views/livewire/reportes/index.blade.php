@@ -64,6 +64,11 @@ $resumen = computed(function () {
     </div>
 
     @if ($seccion_id)
+        <div class="mb-3">
+            <a href="{{ route('reportes.pdf', $seccion_id) }}" target="_blank" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 inline-block text-sm">
+                Exportar a PDF
+            </a>
+        </div>
         <div class="bg-white rounded-lg shadow overflow-hidden">
             <table class="w-full text-sm">
                 <thead class="bg-gray-50 text-left">

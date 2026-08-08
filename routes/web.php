@@ -5,6 +5,28 @@ use Livewire\Volt\Volt;
 use App\Models\Estudiante;
 use Barryvdh\DomPDF\Facade\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Models\Asistencia;
+
+Route::get('/reportes/{seccion}/pdf', function (\App\Models\Seccion $seccion) {
+    $estudiantes = $seccion->estudiantes;
+
+    $resumen = $estudiantes->map(function ($estudiante) use ($seccion) {
+        $asistencias = Asistencia::where('estudiante_id', $estudiante->id)
+            ->whereHas('sesionClase', fn($q) => $q->where('seccion_id', $seccion->id))
+            ->get();
+
+        $total = $asistencias->count();
+        $presentes = $asistencias->where('estado', 'presente_completo')->count();
+        $parciales = $asistencias->where('estado', 'no_marco_salida')->count();
+        $faltas = $asistencias->where('estado', 'falta')->count();
+        $porcentaje = $total > 0 ? round((($presentes + $parciales) / $total) * 100) : 0;
+
+        return compact('estudiante', 'total', 'presentes', 'parciales', 'faltas', 'porcentaje');
+    })->sortBy('estudiante.nombre');
+
+    $pdf = Pdf::loadView('reportes.pdf', compact('seccion', 'resumen'));
+    return $pdf->stream('reporte-asistencia.pdf');
+})->middleware(['auth', 'verified'])->name('reportes.pdf');
 
 Route::get('/carnets/generar', function () {
     $estudiantes = Estudiante::orderBy('nombre')->get();
