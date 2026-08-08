@@ -49,31 +49,31 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 Volt::route('carreras', 'carreras.index')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'role:admin'])
     ->name('carreras');
 
 Volt::route('materias', 'materias.index')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'role:admin'])
     ->name('materias');
 
 Volt::route('periodos', 'periodos.index')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'role:admin'])
     ->name('periodos');
 
 Volt::route('trayectos', 'trayectos.index')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'role:admin'])
     ->name('trayectos');
 
 Volt::route('secciones', 'secciones.index')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'role:admin'])
     ->name('secciones');
 
 Volt::route('estudiantes', 'estudiantes.index')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'role:admin'])
     ->name('estudiantes');
 
 Volt::route('inscripciones', 'inscripciones.index')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'role:admin'])
     ->name('inscripciones');
 
 Volt::route('escaneo', 'escaneo.index')

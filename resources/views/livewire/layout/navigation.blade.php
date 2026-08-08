@@ -24,10 +24,41 @@ $logout = function (Logout $logout) {
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
+    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+        {{ __('Dashboard') }}
+    </x-nav-link>
+
+    @role('admin')
+        <x-nav-link :href="route('carreras')" :active="request()->routeIs('carreras')">
+            Carreras
+        </x-nav-link>
+        <x-nav-link :href="route('materias')" :active="request()->routeIs('materias')">
+            Materias
+        </x-nav-link>
+        <x-nav-link :href="route('periodos')" :active="request()->routeIs('periodos')">
+            Períodos
+        </x-nav-link>
+        <x-nav-link :href="route('trayectos')" :active="request()->routeIs('trayectos')">
+            Trayectos
+        </x-nav-link>
+        <x-nav-link :href="route('secciones')" :active="request()->routeIs('secciones')">
+            Secciones
+        </x-nav-link>
+        <x-nav-link :href="route('estudiantes')" :active="request()->routeIs('estudiantes')">
+            Estudiantes
+        </x-nav-link>
+        <x-nav-link :href="route('inscripciones')" :active="request()->routeIs('inscripciones')">
+            Inscripciones
+        </x-nav-link>
+    @endrole
+
+    <x-nav-link :href="route('escaneo')" :active="request()->routeIs('escaneo')">
+        Escaneo
+    </x-nav-link>
+    <x-nav-link :href="route('reportes')" :active="request()->routeIs('reportes')">
+        Reportes
+    </x-nav-link>
+</div>
             </div>
 
             <!-- Settings Dropdown -->
